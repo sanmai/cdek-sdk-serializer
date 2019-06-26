@@ -58,4 +58,11 @@ final class SerializerExample
      * @var string
      */
     public $BAR;
+
+    /**
+     * @JMS\Type("array<int>")
+     *
+     * @var int[]
+     */
+    public $Numbers;
 }

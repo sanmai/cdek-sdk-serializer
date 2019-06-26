@@ -28,11 +28,10 @@ declare(strict_types=1);
 
 namespace Tests\CdekSDK\Deserialization;
 
-use CdekSDK\Common\Item;
-use CdekSDK\Responses\CalculationWithTariffListResponse;
 use CdekSDK\Serialization\Exception\LibXMLError;
 use CdekSDK\Serialization\Exception\XmlErrorException;
 use JMS\Serializer\Exception\RuntimeException;
+use Tests\CdekSDK\Fixtures\SerializerExample;
 
 /**
  * @covers \CdekSDK\Serialization\Serializer
@@ -45,21 +44,21 @@ class InvalidXMLTest extends TestCase
     {
         $this->expectException(\JMS\Serializer\Exception\XmlErrorException::class);
 
-        $this->getSerializer()->deserialize('', Item::class, 'xml');
+        $this->getSerializer()->deserialize('', SerializerExample::class, 'xml');
     }
 
     public function test_passes_through_original_exception_if_not_xml()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Invalid data');
+        $this->expectExceptionMessage('Expected array, but got integer');
 
-        $this->getSerializer()->deserialize(\json_encode(['error' => ['a' => 'b']]), CalculationWithTariffListResponse::class, 'json');
+        $this->getSerializer()->deserialize(\json_encode(['Numbers' => 1]), SerializerExample::class, 'json');
     }
 
     public function test_error_contains_invalid_xml()
     {
         try {
-            $this->getSerializer()->deserialize('foo<bar>', Item::class, 'xml');
+            $this->getSerializer()->deserialize('foo<bar>', SerializerExample::class, 'xml');
         } catch (XmlErrorException $e) {
             $this->assertStringStartsWith('Expected valid XML', $e->getMessage());
             $this->assertContains('foo<bar>', $e->getMessage());

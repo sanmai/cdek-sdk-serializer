@@ -28,7 +28,6 @@ declare(strict_types=1);
 
 namespace CdekSDK\Serialization;
 
-use CdekSDK\Contracts\Request;
 use CdekSDK\Serialization\Exception\DeserializationException;
 use CdekSDK\Serialization\Exception\LibXMLError;
 use CdekSDK\Serialization\Exception\XmlErrorException;
@@ -47,6 +46,8 @@ use JMS\Serializer\SerializerInterface;
 
 final class Serializer implements SerializerInterface
 {
+    const SERIALIZATION_XML = 'xml';
+
     /** @var bool */
     private static $configureAnnotationRegistry = true;
 
@@ -188,7 +189,7 @@ final class Serializer implements SerializerInterface
              */
             throw new XmlErrorException(LibXMLError::fromLibXMLError($e->getXmlError(), $data), $e->getCode(), $e);
         } catch (\JMS\Serializer\Exception\RuntimeException $e) {
-            if (Request::SERIALIZATION_XML === $format) {
+            if (self::SERIALIZATION_XML === $format) {
                 throw DeserializationException::fromRuntimeException($e, $this->getLastSeenSimpleXMLElement());
             }
 

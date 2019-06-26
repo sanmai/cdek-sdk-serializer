@@ -28,13 +28,9 @@ declare(strict_types=1);
 
 namespace Tests\CdekSDK;
 
-use CdekSDK\Requests\StatusReportRequest;
-use CdekSDK\Responses\CitiesResponse;
-use CdekSDK\Responses\StatusReportResponse;
 use CdekSDK\Serialization\Serializer;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
-use Tests\CdekSDK\Fixtures\FixtureLoader;
 use Tests\CdekSDK\Fixtures\SerializerExample;
 
 /**
@@ -73,35 +69,6 @@ class SerializerTest extends TestCase
         new Serializer();
 
         $this->assertTrue($this->isAnnotationRegistryConfigured());
-    }
-
-    public function test_it_can_deserialize()
-    {
-        $serializer = new Serializer();
-        $response = $serializer->deserialize(FixtureLoader::load('StatusReportResponse.xml'), StatusReportResponse::class, 'xml');
-
-        \assert($response instanceof StatusReportResponse); // PHPStan hint
-
-        /** @var $response StatusReportResponse */
-        $this->assertInstanceOf(StatusReportResponse::class, $response);
-        $this->assertSame('1000028000', $response->getOrders()[0]->getDispatchNumber());
-        $this->assertNull($response->getOrders()[0]->getDelayReason()->getDate());
-
-        $response = $serializer->deserialize(FixtureLoader::load('CitiesResponse.xml'), CitiesResponse::class, 'xml');
-        \assert($response instanceof CitiesResponse); // PHPStan hint
-
-        $this->assertInstanceOf(CitiesResponse::class, $response);
-        $this->assertCount(5, $response->getItems());
-    }
-
-    public function test_it_can_serialize()
-    {
-        $serializer = new Serializer();
-        $response = $serializer->serialize(new StatusReportRequest(), 'xml');
-
-        $this->assertSame('<?xml version="1.0" encoding="UTF-8"?>
-<StatusReport/>
-', $response);
     }
 
     public function test_it_can_deserialize_mixed_case_attributes()

@@ -28,7 +28,6 @@ declare(strict_types=1);
 
 namespace Tests\CdekSDK\Deserialization;
 
-use CdekSDK\Common\Order;
 use CdekSDK\Responses\StatusReportResponse;
 use CdekSDK\Responses\Types\Result;
 use CdekSDK\Serialization\Exception\DeserializationException;
@@ -36,7 +35,7 @@ use CdekSDK\Serialization\NullableDateTimeHandler;
 use JMS\Serializer\Exception\RuntimeException;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\XmlDeserializationVisitor;
-use Tests\CdekSDK\Fixtures\FixtureLoader;
+use Tests\CdekSDK\Fixtures\DateTimeExample;
 
 /**
  * @covers \CdekSDK\Serialization\NullableDateTimeHandler
@@ -45,33 +44,46 @@ use Tests\CdekSDK\Fixtures\FixtureLoader;
  */
 class NullableDateTimeHandlerTest extends TestCase
 {
-    public function test_unserialize_normal_date()
+    public function test_unserialize_missing_date()
     {
-        $result = $this->getSerializer()->deserialize(FixtureLoader::load('StatusReportResponse.xml'), StatusReportResponse::class, 'xml');
+        $result = $this->getSerializer()->deserialize('<DateTimeExample Date="2019-06-01" DateTime="2019-06-02T22:11:41+00:00" />', DateTimeExample::class, 'xml');
 
         /** @var $result StatusReportResponse */
-        $this->assertInstanceOf(StatusReportResponse::class, $result);
-        $this->assertNull($result->getOrders()[0]->getDate());
+        $this->assertInstanceOf(DateTimeExample::class, $result);
+        $this->assertNull($result->DateMixed);
     }
 
-    public function test_it_reads_response_with_delivery_date_without_time()
+    public function test_unserialize_empty_date()
     {
-        $response = $this->getSerializer()->deserialize(FixtureLoader::load('StatusReportResponseDateOnly.xml'), StatusReportResponse::class, 'xml');
+        $result = $this->getSerializer()->deserialize('<DateTimeExample Date="" DateTime="" />', DateTimeExample::class, 'xml');
 
-        /** @var $response StatusReportResponse */
-        $this->assertInstanceOf(StatusReportResponse::class, $response);
+        /** @var $result StatusReportResponse */
+        $this->assertInstanceOf(DateTimeExample::class, $result);
+        $this->assertNull($result->Date);
+        $this->assertNull($result->DateTime);
+        $this->assertNull($result->DateMixed);
+    }
 
-        $this->assertCount(2, $response->getOrders());
+    public function test_unserialize_date_with_time()
+    {
+        $result = $this->getSerializer()->deserialize('<DateTimeExample DateMixed="2019-06-03T23:22:15+00:00" />', DateTimeExample::class, 'xml');
 
-        $order = $response->getOrders()[0];
-        $this->assertInstanceOf(Order::class, $order);
+        /** @var $result StatusReportResponse */
+        $this->assertInstanceOf(DateTimeExample::class, $result);
+        $this->assertNotNull($result->DateMixed);
 
-        $this->assertSame('2018-04-06 13:33:27', $order->getDeliveryDate()->format('Y-m-d H:i:s'));
+        $this->assertSame('2019-06-03 23:22:15', $result->DateMixed->format('Y-m-d H:i:s'));
+    }
 
-        $order = $response->getOrders()[1];
-        $this->assertInstanceOf(Order::class, $order);
+    public function test_unserialize_date_without_time()
+    {
+        $result = $this->getSerializer()->deserialize('<DateTimeExample DateMixed="2019-06-03" />', DateTimeExample::class, 'xml');
 
-        $this->assertSame('2011-04-07 00:00:00', $order->getDeliveryDate()->format('Y-m-d H:i:s'));
+        /** @var $result StatusReportResponse */
+        $this->assertInstanceOf(DateTimeExample::class, $result);
+        $this->assertNotNull($result->DateMixed);
+
+        $this->assertSame('2019-06-03 00:00:00', $result->DateMixed->format('Y-m-d H:i:s'));
     }
 
     public function test_fails_on_invalid_date()
@@ -79,7 +91,7 @@ class NullableDateTimeHandlerTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectException(\JMS\Serializer\Exception\RuntimeException::class);
 
-        $this->getSerializer()->deserialize('<Order DeliveryDate="00:00:00" />', Order::class, 'xml');
+        $this->getSerializer()->deserialize('<DateTimeExample DateTime="00:00:00" />', DateTimeExample::class, 'xml');
     }
 
     public function test_fails_on_unexpected_date_format_with_serializer_exception()
@@ -87,7 +99,7 @@ class NullableDateTimeHandlerTest extends TestCase
         $this->expectException(\JMS\Serializer\Exception\RuntimeException::class);
         $this->expectExceptionMessageRegExp('/^Failed to deserialize Date="2000-01-01 00:00:00": .* expected format/');
 
-        $this->getSerializer()->deserialize('<Order Date="2000-01-01 00:00:00" />', Order::class, 'xml');
+        $this->getSerializer()->deserialize('<DateTimeExample Date="2000-01-01 00:00:00" />', DateTimeExample::class, 'xml');
     }
 
     public function test_fails_on_unexpected_date_format_with_our_exception()
@@ -95,7 +107,7 @@ class NullableDateTimeHandlerTest extends TestCase
         $this->expectException(DeserializationException::class);
         $this->expectExceptionMessageRegExp('/^Failed to deserialize Date="2001-01-01 00:00:01": .* expected format/');
 
-        $this->getSerializer()->deserialize('<Order Date="2001-01-01 00:00:01" />', Order::class, 'xml');
+        $this->getSerializer()->deserialize('<DateTimeExample Date="2001-01-01 00:00:01" />', DateTimeExample::class, 'xml');
     }
 
     public function test_do_not_resets_time_if_not_needed()
