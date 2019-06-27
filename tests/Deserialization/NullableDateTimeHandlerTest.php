@@ -33,7 +33,6 @@ use CdekSDK\Responses\Types\Result;
 use CdekSDK\Serialization\Exception\DeserializationException;
 use CdekSDK\Serialization\NullableDateTimeHandler;
 use JMS\Serializer\Exception\RuntimeException;
-use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\XmlDeserializationVisitor;
 use Tests\CdekSDK\Fixtures\DateTimeExample;
 
@@ -113,7 +112,7 @@ class NullableDateTimeHandlerTest extends TestCase
     public function test_do_not_resets_time_if_not_needed()
     {
         $handler = new NullableDateTimeHandler();
-        $visitor = new XmlDeserializationVisitor(new IdenticalPropertyNamingStrategy());
+        $visitor = new XmlDeserializationVisitor();
         $sxe = new \SimpleXMLElement('<date>2000-01-01_</date>');
 
         if (\date('H:i:s') === '00:00:00') {

@@ -33,7 +33,7 @@ use JMS\Serializer\GraphNavigatorInterface;
 use JMS\Serializer\Handler\DateHandler;
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
 use JMS\Serializer\SerializationContext;
-use JMS\Serializer\VisitorInterface;
+use JMS\Serializer\Visitor\SerializationVisitorInterface;
 use JMS\Serializer\XmlDeserializationVisitor;
 
 /**
@@ -112,7 +112,7 @@ final class NullableDateTimeHandler implements SubscribingHandlerInterface
         return $datetime;
     }
 
-    public function serializeDateTimeInterface(VisitorInterface $visitor, \DateTimeInterface $date, array $type, SerializationContext $context)
+    public function serializeDateTimeInterface(SerializationVisitorInterface $visitor, \DateTimeInterface $date, array $type, SerializationContext $context)
     {
         // DateTimeInterface can't be implemented by user classes, so it's either \DateTime or \DateTimeImmutable
 

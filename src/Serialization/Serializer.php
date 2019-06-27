@@ -159,25 +159,20 @@ final class Serializer implements SerializerInterface
      * @see \JMS\Serializer\SerializerInterface::serialize()
      * @psalm-suppress MoreSpecificImplementedParamType
      *
-     * @param object $data
-     * @param string $format
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function serialize($data, $format, SerializationContext $context = null)
+    public function serialize($data, string $format, SerializationContext $context = null, string $type = null): string
     {
-        return $this->serializer->serialize($data, $format, $context);
+        return $this->serializer->serialize($data, $format, $context, $type);
     }
 
     /**
      * @see \JMS\Serializer\SerializerInterface::deserialize()
      * @psalm-suppress MoreSpecificImplementedParamType
      *
-     * @param mixed  $data
-     * @param string $type
-     * @param string $format
+     * {@inheritdoc}
      */
-    public function deserialize($data, $type, $format, DeserializationContext $context = null)
+    public function deserialize(string $data, string $type, string $format, DeserializationContext $context = null)
     {
         $data = (string) $data;
 
