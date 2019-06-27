@@ -53,6 +53,8 @@ final class Serializer implements SerializerInterface
 
     /**
      * Настраивать ли AnnotationRegistry в автоматическом режиме, используя штатный автозагрузчик классов.
+     *
+     * @codeCoverageIgnore
      */
     public static function doNotConfigureAnnotationRegistry()
     {
@@ -194,6 +196,9 @@ final class Serializer implements SerializerInterface
 
     private static $annotationRegistryReady = false;
 
+    /**
+     * @codeCoverageIgnore
+     */
     private static function configureAnnotationRegistry()
     {
         if (self::$annotationRegistryReady) {
@@ -204,14 +209,12 @@ final class Serializer implements SerializerInterface
             $reflectionClass = new \ReflectionClass(AnnotationRegistry::class);
             $reflectionProperty = $reflectionClass->getProperty('loaders');
             $reflectionProperty->setAccessible(true);
-            // @codeCoverageIgnoreStart
         } catch (\ReflectionException $unused_exception) {
             // Свойство недоступно, или ещё что. Больше не пытаемся.
             self::$annotationRegistryReady = true;
 
             return;
         }
-        // @codeCoverageIgnoreEnd
 
         // Настройку делаем только если её не сделали за нас.
         if ([] === $reflectionProperty->getValue()) {
@@ -224,8 +227,6 @@ final class Serializer implements SerializerInterface
             }
         }
 
-        // @codeCoverageIgnoreStart
         self::$annotationRegistryReady = true;
-        // @codeCoverageIgnoreEnd
     }
 }
