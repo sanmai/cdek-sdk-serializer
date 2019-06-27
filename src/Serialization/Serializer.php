@@ -220,8 +220,13 @@ final class Serializer implements SerializerInterface
 
         // Настройку делаем только если её не сделали за нас.
         if ([] === $reflectionProperty->getValue()) {
-            /** @phan-suppress-next-line PhanDeprecatedFunction */
-            AnnotationRegistry::registerLoader('class_exists');
+            if (\method_exists(AnnotationRegistry::class, 'registerUniqueLoader')) {
+                /** @phan-suppress-next-line PhanDeprecatedFunction */
+                AnnotationRegistry::registerUniqueLoader('class_exists');
+            } elseif (\method_exists(AnnotationRegistry::class, 'registerLoader')) {
+                /** @phan-suppress-next-line PhanDeprecatedFunction */
+                AnnotationRegistry::registerLoader('class_exists');
+            }
         }
 
         // @codeCoverageIgnoreStart
