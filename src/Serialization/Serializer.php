@@ -161,7 +161,7 @@ final class Serializer implements SerializerInterface
      * @see \JMS\Serializer\SerializerInterface::serialize()
      * @psalm-suppress MoreSpecificImplementedParamType
      *
-     * {@inheritdoc}
+     * @param mixed $data
      */
     public function serialize($data, string $format, SerializationContext $context = null, string $type = null): string
     {
@@ -171,8 +171,6 @@ final class Serializer implements SerializerInterface
     /**
      * @see \JMS\Serializer\SerializerInterface::deserialize()
      * @psalm-suppress MoreSpecificImplementedParamType
-     *
-     * {@inheritdoc}
      */
     public function deserialize(string $data, string $type, string $format, DeserializationContext $context = null)
     {
