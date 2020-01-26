@@ -19,7 +19,7 @@ export PHP_CS_FIXER_IGNORE_ENV=1
 PHPUNIT=vendor/bin/phpunit
 PHPUNIT_COVERAGE_CLOVER=--coverage-clover=build/logs/clover.xml
 PHPUNIT_GROUP=default
-PHPUNIT_ARGS=--coverage-xml=build/logs/coverage-xml --log-junit=build/logs/phpunit.junit.xml $(PHPUNIT_COVERAGE_CLOVER)
+PHPUNIT_ARGS=--coverage-xml=build/logs/coverage-xml --log-junit=build/logs/junit.xml $(PHPUNIT_COVERAGE_CLOVER)
 
 # Phan
 PHAN=vendor/bin/phan
@@ -61,6 +61,7 @@ ci-analyze: prerequisites ci-phpunit ci-infection ci-phan ci-phpstan ci-psalm
 
 ci-phpunit: ci-cs
 	$(SILENT) $(PHPDBG) $(PHPUNIT) $(PHPUNIT_ARGS)
+	cp build/logs/junit.xml build/logs/phpunit.junit.xml
 
 ci-infection: ci-phpunit
 	$(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS)
@@ -94,6 +95,7 @@ test-prerequisites: prerequisites composer.lock
 .PHONY: phpunit
 phpunit: cs
 	$(SILENT) $(PHP) $(PHPUNIT) $(PHPUNIT_ARGS) --verbose
+	cp build/logs/junit.xml build/logs/phpunit.junit.xml
 	CI=true $(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS)
 
 .PHONY: analyze

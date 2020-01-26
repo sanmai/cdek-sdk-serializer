@@ -83,8 +83,7 @@ final class NullableDateTimeHandler implements SubscribingHandlerInterface
      *
      * @JMS\Type("DateTimeImmutable<'Y-m-d\TH:i:sP', '', 'Y-m-d\TH:i:sP', 'Y-m-d'>")
      *
-     * @param XmlDeserializationVisitor $visitor
-     * @param mixed                     $data
+     * @param mixed $data
      *
      * @return \DateTimeInterface|null
      *
