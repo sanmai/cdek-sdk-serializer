@@ -23,7 +23,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",
         "infection/infection": ">=0.10",
-        "phan/phan": "^1 || ^2",
+        "phan/phan": "^1 || ^2 || ^3",
         "php-coveralls/php-coveralls": "^2.1",
         "phpstan/phpstan": ">=0.10",
         "phpunit/phpunit": "^6.5 || ^7.4",
