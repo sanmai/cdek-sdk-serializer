@@ -96,7 +96,7 @@ class NullableDateTimeHandlerTest extends TestCase
     public function test_fails_on_unexpected_date_format_with_serializer_exception()
     {
         $this->expectException(\JMS\Serializer\Exception\RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/^Failed to deserialize Date="2000-01-01 00:00:00": .* expected format/');
+        $this->expectExceptionMessageRegExp('/^Failed to deserialize Date="2000-01-01 00:00:00": .* expected.*format/');
 
         $this->getSerializer()->deserialize('<DateTimeExample Date="2000-01-01 00:00:00" />', DateTimeExample::class, 'xml');
     }
@@ -104,7 +104,7 @@ class NullableDateTimeHandlerTest extends TestCase
     public function test_fails_on_unexpected_date_format_with_our_exception()
     {
         $this->expectException(DeserializationException::class);
-        $this->expectExceptionMessageRegExp('/^Failed to deserialize Date="2001-01-01 00:00:01": .* expected format/');
+        $this->expectExceptionMessageRegExp('/^Failed to deserialize Date="2001-01-01 00:00:01": .* expected.*format/');
 
         $this->getSerializer()->deserialize('<DateTimeExample Date="2001-01-01 00:00:01" />', DateTimeExample::class, 'xml');
     }
