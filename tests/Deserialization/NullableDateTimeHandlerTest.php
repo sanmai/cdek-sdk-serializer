@@ -29,7 +29,6 @@ declare(strict_types=1);
 namespace Tests\CdekSDK\Deserialization;
 
 use CdekSDK\Responses\StatusReportResponse;
-use CdekSDK\Responses\Types\Result;
 use CdekSDK\Serialization\Exception\DeserializationException;
 use CdekSDK\Serialization\NullableDateTimeHandler;
 use JMS\Serializer\Exception\RuntimeException;
