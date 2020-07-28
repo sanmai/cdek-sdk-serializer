@@ -32,7 +32,6 @@ use CdekSDK\Serialization\Exception\DeserializationException;
 use CdekSDK\Serialization\Exception\LibXMLError;
 use CdekSDK\Serialization\Exception\XmlErrorException;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\EventDispatcher\EventDispatcher;
 use JMS\Serializer\EventDispatcher\Events;
@@ -47,19 +46,6 @@ use JMS\Serializer\SerializerInterface;
 final class Serializer implements SerializerInterface
 {
     const SERIALIZATION_XML = 'xml';
-
-    /** @var bool */
-    private static $configureAnnotationRegistry = true;
-
-    /**
-     * Настраивать ли AnnotationRegistry в автоматическом режиме, используя штатный автозагрузчик классов.
-     *
-     * @codeCoverageIgnore
-     */
-    public static function doNotConfigureAnnotationRegistry()
-    {
-        self::$configureAnnotationRegistry = false;
-    }
 
     private static $addGlobalIgnoredAnnotations = true;
 
@@ -121,10 +107,6 @@ final class Serializer implements SerializerInterface
             self::$addGlobalIgnoredAnnotations = false;
         }
         // @codeCoverageIgnoreEnd
-
-        if (self::$configureAnnotationRegistry) {
-            self::configureAnnotationRegistry();
-        }
     }
 
     /**
@@ -190,41 +172,5 @@ final class Serializer implements SerializerInterface
 
             throw $e;
         }
-    }
-
-    private static $annotationRegistryReady = false;
-
-    /**
-     * @codeCoverageIgnore
-     */
-    private static function configureAnnotationRegistry()
-    {
-        if (self::$annotationRegistryReady) {
-            return;
-        }
-
-        try {
-            $reflectionClass = new \ReflectionClass(AnnotationRegistry::class);
-            $reflectionProperty = $reflectionClass->getProperty('loaders');
-            $reflectionProperty->setAccessible(true);
-        } catch (\ReflectionException $unused_exception) {
-            // Свойство недоступно, или ещё что. Больше не пытаемся.
-            self::$annotationRegistryReady = true;
-
-            return;
-        }
-
-        // Настройку делаем только если её не сделали за нас.
-        if ([] === $reflectionProperty->getValue()) {
-            if (\method_exists(AnnotationRegistry::class, 'registerUniqueLoader')) {
-                /** @phan-suppress-next-line PhanDeprecatedFunction */
-                AnnotationRegistry::registerUniqueLoader('class_exists');
-            } elseif (\method_exists(AnnotationRegistry::class, 'registerLoader')) {
-                /** @phan-suppress-next-line PhanDeprecatedFunction */
-                AnnotationRegistry::registerLoader('class_exists');
-            }
-        }
-
-        self::$annotationRegistryReady = true;
     }
 }

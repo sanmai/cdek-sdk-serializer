@@ -29,7 +29,6 @@ declare(strict_types=1);
 namespace Tests\CdekSDK;
 
 use CdekSDK\Serialization\Serializer;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
 use Tests\CdekSDK\Fixtures\SerializerExample;
 
@@ -38,39 +37,6 @@ use Tests\CdekSDK\Fixtures\SerializerExample;
  */
 class SerializerTest extends TestCase
 {
-    private function unconfigureAnnotationRegistry()
-    {
-        \Closure::bind(function () {
-            AnnotationRegistry::$loaders = [];
-        }, null, AnnotationRegistry::class)();
-    }
-
-    private function isAnnotationRegistryConfigured(): bool
-    {
-        return 'class_exists' === \Closure::bind(function () {
-            return \end(AnnotationRegistry::$loaders);
-        }, null, AnnotationRegistry::class)();
-    }
-
-    public function test_it_configures_annotation_registry()
-    {
-        Serializer::doNotConfigureAnnotationRegistry();
-        $this->unconfigureAnnotationRegistry();
-
-        new Serializer();
-
-        $this->assertFalse($this->isAnnotationRegistryConfigured());
-
-        \Closure::bind(function () {
-            Serializer::$configureAnnotationRegistry = true;
-            Serializer::$annotationRegistryReady = false;
-        }, null, Serializer::class)();
-
-        new Serializer();
-
-        $this->assertTrue($this->isAnnotationRegistryConfigured());
-    }
-
     public function test_it_can_deserialize_mixed_case_attributes()
     {
         $serializer = new Serializer();

@@ -17,7 +17,8 @@
         "ext-SimpleXML": "*",
         "ext-json": "*",
         "ext-libxml": "*",
-        "jms/serializer": "^3.2"
+        "doctrine/annotations": "^1.10.3",
+        "jms/serializer": "^3.8"
     },
     "conflict": {},
     "require-dev": {
