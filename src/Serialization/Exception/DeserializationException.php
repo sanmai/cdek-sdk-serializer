@@ -32,10 +32,17 @@ use JMS\Serializer\Exception\RuntimeException;
 
 final class DeserializationException extends RuntimeException
 {
-    public static function fromRuntimeException(RuntimeException $exception, \SimpleXMLElement $element = null)
+    /**
+     * @psalm-suppress InvalidScalarArgument
+     */
+    public static function fromRuntimeException(RuntimeException $exception, \SimpleXMLElement $element = null): DeserializationException
     {
         // $element->xpath("..")[0]->asXML() to get a parent
 
-        return new static(\sprintf('Failed to deserialize %s: %s', \trim($element ? (string) $element->asXML() : 'unknown element'), $exception->getMessage()), $exception->getCode(), $exception);
+        return new static(
+            \sprintf('Failed to deserialize %s: %s', \trim($element ? (string) $element->asXML() : 'unknown element'), $exception->getMessage()),
+            $exception->getCode(),
+            $exception
+        );
     }
 }
