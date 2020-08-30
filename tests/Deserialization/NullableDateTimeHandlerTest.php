@@ -39,6 +39,8 @@ use Tests\CdekSDK\Fixtures\DateTimeExample;
  * @covers \CdekSDK\Serialization\NullableDateTimeHandler
  * @covers \CdekSDK\Serialization\Exception\DeserializationException
  * @covers \CdekSDK\Serialization\Serializer
+ *
+ * @method expectExceptionMessageRegExp(string $regex)
  */
 class NullableDateTimeHandlerTest extends TestCase
 {
@@ -135,5 +137,12 @@ class NullableDateTimeHandlerTest extends TestCase
     {
         $handler = new NullableDateTimeHandler();
         $this->assertSame('P1D', $handler->format(new \DateInterval('P1D')));
+    }
+
+    public function __call($method, $args)
+    {
+        if ($method === 'expectExceptionMessageRegExp') {
+            $this->expectExceptionMessageMatches(...$args);
+        }
     }
 }

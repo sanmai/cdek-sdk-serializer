@@ -28,7 +28,8 @@
         "phan/phan": ">=1",
         "php-coveralls/php-coveralls": "^2.1",
         "phpstan/phpstan": ">=0.10",
-        "phpunit/phpunit": "^6.5 || ^7.4",
+        "phpunit/phpunit": "<9.3",
+        "sanmai/phpunit-legacy-adapter": "^6 || ^8",
         "vimeo/psalm": ">=3.0.16"
     },
     "suggest": {

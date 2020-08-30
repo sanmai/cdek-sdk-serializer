@@ -61,7 +61,7 @@ class InvalidXMLTest extends TestCase
             $this->getSerializer()->deserialize('foo<bar>', SerializerExample::class, 'xml');
         } catch (XmlErrorException $e) {
             $this->assertStringStartsWith('Expected valid XML', $e->getMessage());
-            $this->assertContains('foo<bar>', $e->getMessage());
+            $this->assertStringContainsString('foo<bar>', $e->getMessage());
             $this->assertInstanceOf(\LibXMLError::class, $e->getXmlError());
             $this->assertSame(1, $e->getXmlError()->line);
             $this->assertInstanceOf(\JMS\Serializer\Exception\XmlErrorException::class, $e->getPrevious());
@@ -79,5 +79,12 @@ class InvalidXMLTest extends TestCase
         $this->assertSame('foo', $newError->message);
         $this->assertSame(1, $newError->line);
         $this->assertSame('bar', $newError->xmlWithError);
+    }
+
+    public function __call($method, $args)
+    {
+        if ($method === 'assertStringContainsString') {
+            $this->assertContains(...$args);
+        }
     }
 }
