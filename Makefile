@@ -54,6 +54,7 @@ all: test
 
 ci-test: SILENT=
 ci-test: prerequisites
+	test -f vendor/phpunit/phpunit/schema/9.2.xsd && cp vendor/phpunit/phpunit/schema/9.2.xsd vendor/phpunit/phpunit/phpunit.xsd
 	$(SILENT) $(PHPDBG) $(PHPUNIT) $(PHPUNIT_COVERAGE_CLOVER) --verbose --group=$(PHPUNIT_GROUP)
 
 ci-analyze: SILENT=
@@ -95,6 +96,7 @@ test-prerequisites: prerequisites composer.lock
 
 .PHONY: phpunit
 phpunit: cs
+	test -f vendor/phpunit/phpunit/schema/9.2.xsd && cp vendor/phpunit/phpunit/schema/9.2.xsd vendor/phpunit/phpunit/phpunit.xsd
 	$(SILENT) $(PHP) $(PHPUNIT) $(PHPUNIT_ARGS) --verbose
 	cp build/logs/junit.xml build/logs/phpunit.junit.xml
 	CI=true $(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS)
