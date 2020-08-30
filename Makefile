@@ -77,6 +77,7 @@ ci-psalm: ci-cs
 
 ci-cs: prerequisites
 	$(SILENT) $(PHP) $(PHP_CS_FIXER) $(PHP_CS_FIXER_ARGS) --dry-run --stop-on-violation fix
+	$(SILENT) $(COMPOSER) normalize --no-check-lock --dry-run
 
 ##############################################################
 # Development Workflow                                       #
@@ -116,6 +117,7 @@ psalm: cs
 .PHONY: cs
 cs: test-prerequisites
 	$(SILENT) $(PHP) $(PHP_CS_FIXER) $(PHP_CS_FIXER_ARGS) --diff fix
+	$(SILENT) $(COMPOSER) normalize --no-check-lock --no-update-lock
 
 ##############################################################
 # Prerequisites Setup                                        #

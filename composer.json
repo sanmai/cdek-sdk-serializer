@@ -22,6 +22,7 @@
     },
     "conflict": {},
     "require-dev": {
+        "ergebnis/composer-normalize": "^2.8",
         "friendsofphp/php-cs-fixer": "^2.14",
         "infection/infection": ">=0.10",
         "phan/phan": "^1 || ^2",
