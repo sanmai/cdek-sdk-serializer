@@ -54,7 +54,6 @@ all: test
 
 ci-test: SILENT=
 ci-test: prerequisites
-	test -f vendor/phpunit/phpunit/schema/9.2.xsd && cp vendor/phpunit/phpunit/schema/9.2.xsd vendor/phpunit/phpunit/phpunit.xsd
 	$(SILENT) $(PHPDBG) $(PHPUNIT) $(PHPUNIT_COVERAGE_CLOVER) --verbose --group=$(PHPUNIT_GROUP)
 
 ci-analyze: SILENT=
@@ -79,6 +78,7 @@ ci-psalm: ci-cs
 ci-cs: prerequisites
 	$(SILENT) $(PHP) $(PHP_CS_FIXER) $(PHP_CS_FIXER_ARGS) --dry-run --stop-on-violation fix
 	$(SILENT) $(COMPOSER) normalize --no-check-lock --dry-run
+	test -f vendor/phpunit/phpunit/schema/9.2.xsd && cp vendor/phpunit/phpunit/schema/9.2.xsd vendor/phpunit/phpunit/phpunit.xsd
 
 ##############################################################
 # Development Workflow                                       #
@@ -96,7 +96,6 @@ test-prerequisites: prerequisites composer.lock
 
 .PHONY: phpunit
 phpunit: cs
-	test -f vendor/phpunit/phpunit/schema/9.2.xsd && cp vendor/phpunit/phpunit/schema/9.2.xsd vendor/phpunit/phpunit/phpunit.xsd
 	$(SILENT) $(PHP) $(PHPUNIT) $(PHPUNIT_ARGS) --verbose
 	cp build/logs/junit.xml build/logs/phpunit.junit.xml
 	CI=true $(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS)
@@ -120,6 +119,7 @@ psalm: cs
 cs: test-prerequisites
 	$(SILENT) $(PHP) $(PHP_CS_FIXER) $(PHP_CS_FIXER_ARGS) --diff fix
 	$(SILENT) $(COMPOSER) normalize --no-check-lock --no-update-lock
+	test -f vendor/phpunit/phpunit/schema/9.2.xsd && cp vendor/phpunit/phpunit/schema/9.2.xsd vendor/phpunit/phpunit/phpunit.xsd
 
 ##############################################################
 # Prerequisites Setup                                        #
