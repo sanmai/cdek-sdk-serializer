@@ -37,11 +37,11 @@ PSALM_ARGS=--show-info=false
 PSALM_PHP_VERSION="PHP 7.2"
 
 # Composer
-COMPOSER=$(PHP) $(shell which composer)
+COMPOSER=$(shell which composer)
 
 # Infection
 INFECTION=vendor/bin/infection
-MIN_MSI=87
+MIN_MSI=80
 MIN_COVERED_MSI=90
 INFECTION_ARGS=--min-msi=$(MIN_MSI) --min-covered-msi=$(MIN_COVERED_MSI) --threads=$(JOBS) --coverage=build/logs --log-verbosity=default --show-mutations --no-interaction
 INFECTION_PHP_VERSION="PHP 7.2"
