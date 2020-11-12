@@ -5,6 +5,7 @@ php:
   - 7.2
   - 7.3
   - 7.4
+  - 8.0snapshot
   - nightly
 env:
   - GROUP=default
@@ -19,7 +20,7 @@ jobs:
     - php: nightly
   include:
     - stage: analyze
-      php: 7.3
+      php: 7.4
       install:
         - pecl install ast
         - phpenv config-rm xdebug.ini
