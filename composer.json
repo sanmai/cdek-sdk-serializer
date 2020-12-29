@@ -13,12 +13,12 @@
         }
     ],
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^7.3 || ^8.0",
         "ext-SimpleXML": "*",
         "ext-json": "*",
         "ext-libxml": "*",
         "doctrine/annotations": "^1.10.3",
-        "jms/serializer": "^3.8"
+        "jms/serializer": "^3.11"
     },
     "conflict": {},
     "require-dev": {
