@@ -31,7 +31,6 @@ namespace CdekSDK\Serialization;
 use CdekSDK\Serialization\Exception\DeserializationException;
 use CdekSDK\Serialization\Exception\LibXMLError;
 use CdekSDK\Serialization\Exception\XmlErrorException;
-use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\EventDispatcher\EventDispatcher;
 use JMS\Serializer\EventDispatcher\Events;
@@ -46,8 +45,6 @@ use JMS\Serializer\SerializerInterface;
 final class Serializer implements SerializerInterface
 {
     const SERIALIZATION_XML = 'xml';
-
-    private static $addGlobalIgnoredAnnotations = true;
 
     /** @var SerializerInterface */
     private $serializer;
@@ -96,17 +93,6 @@ final class Serializer implements SerializerInterface
 
         // Can be disabled in certain environments (customized PHP build?)
         $this->ctypeEnabled = \function_exists('\ctype_upper');
-
-        // @codeCoverageIgnoreStart
-        if (self::$addGlobalIgnoredAnnotations) {
-            // Ignore Phan/Psalm issue-suppressing annotations
-            AnnotationReader::addGlobalIgnoredName('phan');
-            AnnotationReader::addGlobalIgnoredName('psalm');
-            AnnotationReader::addGlobalIgnoredName('template');
-            // But do that just once
-            self::$addGlobalIgnoredAnnotations = false;
-        }
-        // @codeCoverageIgnoreEnd
     }
 
     /**
