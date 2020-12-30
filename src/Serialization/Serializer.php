@@ -142,8 +142,6 @@ final class Serializer implements SerializerInterface
      */
     public function deserialize(string $data, string $type, string $format, DeserializationContext $context = null)
     {
-        $data = (string) $data;
-
         try {
             return $this->serializer->deserialize($data, $type, $format, $context);
         } catch (\JMS\Serializer\Exception\XmlErrorException $e) {
