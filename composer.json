@@ -23,7 +23,7 @@
     "conflict": {},
     "require-dev": {
         "ergebnis/composer-normalize": "^2.8",
-        "friendsofphp/php-cs-fixer": "^2.14",
+        "friendsofphp/php-cs-fixer": "^2.17",
         "infection/infection": ">=0.10",
         "phan/phan": ">=1",
         "php-coveralls/php-coveralls": "^2.1",
